@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\" -Recurse -Directory)",
+      "Bash(Select-Object FullName)",
+      "Bash(Sort-Object FullName)",
+      "Bash(Format-Table -HideTableHeaders)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\\\\src\" -Recurse | ForEach-Object { if \\($_.PSIsContainer\\) { \"DIR: \" + $_.FullName } else { \"FILE: \" + $_.FullName } })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\" -File | Where-Object { $_.Name -match '\\\\.\\(json|ts|js|html\\)$|vite|webpack|tsconfig|package' } | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\" -Force | Where-Object { -not $_.PSIsContainer } | ForEach-Object { $_.Name })",
+      "Bash(npm run *)",
+      "Bash(Get-Content \"C:\\\\Users\\\\PRSCOM~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--projects-RankingPrs\\\\7666306b-97f5-44ff-bfae-7c601c5678c3\\\\tasks\\\\bvcdh545v.output\" -Tail 20)"
+    ]
+  }
+}

@@ -1,0 +1,955 @@
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap");
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  background: #0a0a0a;
+  -webkit-font-smoothing: antialiased;
+}
+
+button, input, select {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ─── Container Principal ─── */
+.leaderboard-container {
+  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0d0d0d 100%);
+  color: #ffffff;
+  padding: 16px 24px;
+  font-family: "Rajdhani", sans-serif;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  gap: 12px;
+}
+
+.leaderboard-top {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.leaderboard-top .leaderboard-layout {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.leaderboard-container::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(circle at 10% 20%, rgba(220, 38, 38, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(220, 38, 38, 0.05) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Header ─── */
+.leaderboard-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.settings-button {
+  position: absolute;
+  top: 0; left: 0;
+  background: rgba(220, 38, 38, 0.2);
+  border: 2px solid rgba(220, 38, 38, 0.4);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.settings-button:hover {
+  background: rgba(220, 38, 38, 0.4);
+  border-color: #dc2626;
+  transform: rotate(90deg);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+}
+
+.leaderboard-header .logo-image {
+  max-width: 300px;
+  height: auto;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 2px 8px rgba(220, 38, 38, 0.3));
+}
+
+.leaderboard-header h1 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 30px;
+  font-weight: 900;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin: 0;
+  text-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+  background: linear-gradient(135deg, #ffffff 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.leaderboard-header h1 .track-name {
+  font-size: 22px;
+  color: rgba(220, 38, 38, 0.9);
+  -webkit-text-fill-color: rgba(220, 38, 38, 0.9);
+}
+
+/* ─── Layout Principal ─── */
+.leaderboard-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ─── Painel QR / Status ─── */
+.qr-panel {
+  background: rgba(26, 26, 26, 0.9);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 20px;
+  padding: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.qr-panel h2 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 18px;
+  color: #dc2626;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.qr-code-wrapper {
+  background: rgba(0, 0, 0, 0.4);
+  padding: 14px;
+  border-radius: 16px;
+  display: inline-block;
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.2);
+}
+
+.qr-instruction {
+  margin-top: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ─── Painel de Ranking ─── */
+.ranking-panel {
+  background: rgba(26, 26, 26, 0.95);
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  border-radius: 24px;
+  padding: 24px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(220, 38, 38, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  min-height: 0;
+}
+
+.ranking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(220, 38, 38, 0.2);
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.ranking-title-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.filters-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.pause-button {
+  background: rgba(220, 38, 38, 0.2);
+  border: 2px solid rgba(220, 38, 38, 0.4);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 20px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pause-button:hover {
+  background: rgba(220, 38, 38, 0.4);
+  border-color: #dc2626;
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+  transform: scale(1.1);
+}
+
+.ranking-header h2 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 22px;
+  color: #dc2626;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+}
+
+/* ─── Seletores de Pista e Carro ─── */
+.track-selector,
+.car-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.track-selector label,
+.car-selector label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.track-dropdown,
+.car-dropdown {
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 2px solid rgba(220, 38, 38, 0.4);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 180px;
+}
+
+.track-dropdown:hover,
+.car-dropdown:hover {
+  border-color: rgba(220, 38, 38, 0.8);
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+}
+
+.track-dropdown:focus,
+.car-dropdown:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.25);
+}
+
+.track-dropdown option,
+.car-dropdown option {
+  background: #1a1a1a;
+  color: #ffffff;
+  padding: 10px;
+}
+
+/* ─── Tabela de Ranking ─── */
+.ranking-table-wrapper {
+  overflow-y: auto;
+  border-radius: 16px;
+  border: 2px solid rgba(220, 38, 38, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  flex: 1;
+  min-height: 0;
+}
+
+.ranking-table-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ranking-table-wrapper::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.ranking-table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.4);
+  border-radius: 3px;
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.ranking-table thead {
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.ranking-table thead th,
+.ranking-table tbody td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ranking-table th {
+  padding: 12px 14px;
+  text-align: left;
+  font-family: "Orbitron", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ranking-table th.col-pos {
+  width: 80px;
+  text-align: center;
+}
+
+.ranking-table th.col-player {
+  width: 35%;
+}
+
+.ranking-table th.col-car {
+  width: 30%;
+}
+
+.ranking-table th.col-time {
+  text-align: right;
+  width: 20%;
+}
+
+.ranking-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(220, 38, 38, 0.15);
+  transform: scale(1.01);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+}
+
+.ranking-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.ranking-table tbody tr.top-1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 50%, transparent 100%);
+}
+
+.ranking-table tbody tr.top-1:hover {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.25) 0%, rgba(220, 38, 38, 0.15) 100%);
+}
+
+.ranking-table tbody tr.top-2 {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.15) 0%, rgba(192, 192, 192, 0.05) 50%, transparent 100%);
+}
+
+.ranking-table tbody tr.top-2:hover {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
+}
+
+.ranking-table tbody tr.top-3 {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.15) 0%, rgba(205, 127, 50, 0.05) 50%, transparent 100%);
+}
+
+.ranking-table tbody tr.top-3:hover {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.2) 0%, rgba(220, 38, 38, 0.15) 100%);
+}
+
+.ranking-table td {
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  background: transparent;
+}
+
+.ranking-table td.col-pos {
+  text-align: center;
+}
+
+.ranking-table td.col-time {
+  text-align: right;
+  font-family: "Orbitron", monospace;
+  font-weight: 700;
+  color: #dc2626;
+  font-size: 18px;
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+}
+
+.position-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(220, 38, 38, 0.2);
+  border: 2px solid rgba(220, 38, 38, 0.3);
+}
+
+.position-badge.medal-1,
+.position-badge.medal-2,
+.position-badge.medal-3 {
+  font-size: 32px;
+  background: transparent;
+  border: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+}
+
+.col-player {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.col-car {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ─── Paginação ─── */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.pagination-button {
+  background: rgba(220, 38, 38, 0.2);
+  border: 2px solid rgba(220, 38, 38, 0.4);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #fff;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 110px;
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagination-button:not(:disabled):hover {
+  background: rgba(220, 38, 38, 0.35);
+  border-color: #dc2626;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+}
+
+.pagination-info {
+  font-family: "Orbitron", sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ─── Estados ─── */
+.loading-state,
+.error-state,
+.empty-state {
+  text-align: center;
+  padding: 80px 40px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.loading-state .spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(220, 38, 38, 0.2);
+  border-top-color: #dc2626;
+  border-radius: 50%;
+  margin: 0 auto 25px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-state p,
+.error-state p,
+.empty-state p {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.error-state .error-icon,
+.empty-state .empty-icon {
+  font-size: 64px;
+  display: block;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
+.error-state {
+  color: #dc2626;
+}
+
+.error-state p {
+  color: rgba(220, 38, 38, 0.8);
+}
+
+.empty-state .empty-hint {
+  display: block;
+  margin-top: 12px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ─── Slideshow Inferior ─── */
+.slideshow-section {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.slideshow-wrapper {
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  border-radius: 20px;
+  border: 2px solid rgba(220, 38, 38, 0.35);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(220, 38, 38, 0.1), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.04), transparent 45%),
+    rgba(10, 10, 10, 0.85);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 12px;
+}
+
+.slideshow-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #0b0b0b;
+}
+
+.slideshow-indicators {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.indicator-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: #dc2626;
+  border-color: #dc2626;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.6);
+}
+
+.slideshow-empty {
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  font-size: 16px;
+  padding: 24px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+/* ─── Modal de Configurações ─── */
+.settings-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.settings-modal {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+  border: 2px solid rgba(220, 38, 38, 0.4);
+  border-radius: 20px;
+  padding: 35px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(220, 38, 38, 0.2);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.settings-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(220, 38, 38, 0.3);
+}
+
+.settings-modal-header h2 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 24px;
+  color: #dc2626;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.close-modal-button {
+  background: rgba(220, 38, 38, 0.2);
+  border: 2px solid rgba(220, 38, 38, 0.4);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 18px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-modal-button:hover {
+  background: rgba(220, 38, 38, 0.4);
+  border-color: #dc2626;
+  transform: scale(1.1);
+}
+
+.settings-modal-content {
+  font-family: "Rajdhani", sans-serif;
+}
+
+.settings-description {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.tracks-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.tracks-checkbox-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tracks-checkbox-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+
+.tracks-checkbox-list::-webkit-scrollbar-thumb {
+  background: rgba(220, 38, 38, 0.5);
+  border-radius: 10px;
+}
+
+.tracks-checkbox-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(220, 38, 38, 0.7);
+}
+
+.track-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.track-checkbox-label:hover {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.3);
+  transform: translateX(5px);
+}
+
+.track-checkbox-label input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #dc2626;
+}
+
+.track-checkbox-label span {
+  color: #ffffff;
+  flex: 1;
+}
+
+/* ─── Responsivo ─── */
+@media (max-width: 768px) {
+  .leaderboard-container {
+    padding: 12px 15px;
+  }
+
+  .leaderboard-header h1 {
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
+  .leaderboard-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .qr-panel {
+    display: none;
+  }
+
+  .ranking-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ranking-header h2 {
+    font-size: 18px;
+  }
+
+  .track-dropdown,
+  .car-dropdown {
+    min-width: 140px;
+  }
+
+  .ranking-table th,
+  .ranking-table td {
+    padding: 10px 10px;
+  }
+
+  .ranking-table th {
+    font-size: 11px;
+  }
+
+  .ranking-table td {
+    font-size: 13px;
+  }
+
+  .ranking-table td.col-time {
+    font-size: 15px;
+  }
+
+  .position-badge {
+    font-size: 14px;
+    min-width: 32px;
+    height: 32px;
+  }
+
+  .position-badge.medal-1,
+  .position-badge.medal-2,
+  .position-badge.medal-3 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ranking-table th.col-car,
+  .ranking-table td.col-car {
+    display: none;
+  }
+
+  .ranking-table th.col-player {
+    width: auto;
+  }
+
+  .col-player {
+    font-size: 14px;
+  }
+
+  .ranking-table td.col-time {
+    font-size: 14px;
+  }
+}
+
+/* ─── Landscape ─── */
+@media (orientation: landscape) and (min-height: 500px) {
+  .leaderboard-container {
+    flex-direction: row;
+    height: 100vh;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .leaderboard-top {
+    flex: 2;
+    height: 100%;
+    gap: 8px;
+  }
+
+  .slideshow-section {
+    flex: 1;
+    height: 100%;
+  }
+
+  .leaderboard-header {
+    margin-bottom: 8px;
+  }
+
+  .leaderboard-header h1 {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+
+  .leaderboard-layout {
+    grid-template-columns: 180px 1fr;
+    gap: 12px;
+    height: calc(100% - 80px);
+  }
+
+  .qr-panel {
+    padding: 12px;
+  }
+
+  .qr-panel h2 {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .ranking-panel {
+    padding: 12px 16px;
+    gap: 8px;
+  }
+
+  .ranking-header {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+    gap: 10px;
+  }
+
+  .ranking-header h2 {
+    font-size: 18px;
+  }
+
+  .track-dropdown,
+  .car-dropdown {
+    padding: 6px 10px;
+    font-size: 13px;
+    min-width: 140px;
+  }
+
+  .ranking-table th {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .ranking-table td {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .ranking-table td.col-time {
+    font-size: 16px;
+  }
+
+  .position-badge {
+    min-width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .position-badge.medal-1,
+  .position-badge.medal-2,
+  .position-badge.medal-3 {
+    font-size: 24px;
+  }
+
+  .slideshow-wrapper {
+    border-radius: 12px;
+    padding: 8px;
+  }
+
+  .pagination-controls {
+    margin-top: 4px;
+    gap: 10px;
+  }
+
+  .pagination-button {
+    min-width: 80px;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .pagination-info {
+    font-size: 12px;
+  }
+}
