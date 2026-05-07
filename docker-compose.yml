@@ -1,0 +1,6 @@
+services:
+  rankingprs:
+    build: .
+    ports:
+      - "6767:6767"
+    restart: unless-stopped
