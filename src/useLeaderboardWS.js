@@ -16,7 +16,7 @@ function parseRaw(raw) {
   if (!lapTimeMs) return null
 
   return {
-    id: pilotName,
+    id: `${pilotName}||${raw.track ?? ''}||${raw.trackLayout ?? ''}`,
     driver: pilotName,
     car: raw.car ?? '',
     carClass: raw.event ?? '',
@@ -49,8 +49,9 @@ export function useLeaderboardWS() {
         if (!data?.pilots) return
 
         const stored = Object.values(data.pilots)
+          .filter(p => p.pilotName && p.bestLapTime > 0)
           .map(p => ({
-            id: p.pilotName,
+            id: `${p.pilotName}||${p.track ?? ''}||${p.trackLayout ?? ''}`,
             driver: p.pilotName,
             car: p.car ?? '',
             carClass: '',
@@ -60,10 +61,18 @@ export function useLeaderboardWS() {
             time: p.bestLapTime / 1000,
             date: p.timestamp ? new Date(p.timestamp).toISOString().split('T')[0] : '',
           }))
-          .filter(e => e.time > 0)
-          .sort((a, b) => a.time - b.time)
 
-        if (!destroyed) setEntries(stored)
+        // Merge with any WS entries already received rather than overwriting them
+        if (!destroyed) {
+          setEntries(prev => {
+            const map = new Map(stored.map(e => [e.id, e]))
+            prev.forEach(e => {
+              const s = map.get(e.id)
+              if (!s || e.time < s.time) map.set(e.id, e)
+            })
+            return Array.from(map.values()).sort((a, b) => a.time - b.time)
+          })
+        }
       } catch {
         // server unreachable or no event yet — ignore
       }
