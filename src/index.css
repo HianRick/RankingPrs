@@ -238,6 +238,48 @@ button, input, select {
   text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
 }
 
+/* ─── Título da Pista no Cabeçalho ─── */
+.ranking-track-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex: 0 1 auto;
+  max-width: 280px;
+  min-width: 0;
+  text-align: center;
+  overflow: hidden;
+}
+
+.ranking-track-name {
+  font-family: "Orbitron", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  background: linear-gradient(135deg, #ffffff 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.ranking-layout-name {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(220, 38, 38, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+}
+
 /* ─── Seletores de Pista e Carro ─── */
 .track-selector,
 .car-selector {
@@ -340,7 +382,7 @@ button, input, select {
   padding: 12px 14px;
   text-align: left;
   font-family: "Orbitron", sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -408,7 +450,7 @@ button, input, select {
 
 .ranking-table td {
   padding: 14px 16px;
-  font-size: 15px;
+  font-size: 22px;
   font-weight: 500;
   background: transparent;
 }
@@ -422,7 +464,7 @@ button, input, select {
   font-family: "Orbitron", monospace;
   font-weight: 700;
   color: #dc2626;
-  font-size: 18px;
+  font-size: 26px;
   text-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
 }
 
@@ -432,9 +474,9 @@ button, input, select {
   justify-content: center;
   font-family: "Orbitron", sans-serif;
   font-weight: 700;
-  font-size: 18px;
-  min-width: 40px;
-  height: 40px;
+  font-size: 26px;
+  min-width: 58px;
+  height: 58px;
   border-radius: 50%;
   background: rgba(220, 38, 38, 0.2);
   border: 2px solid rgba(220, 38, 38, 0.3);
@@ -443,7 +485,7 @@ button, input, select {
 .position-badge.medal-1,
 .position-badge.medal-2,
 .position-badge.medal-3 {
-  font-size: 32px;
+  font-size: 46px;
   background: transparent;
   border: none;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
@@ -452,12 +494,12 @@ button, input, select {
 .col-player {
   font-weight: 600;
   color: #ffffff;
-  font-size: 16px;
+  font-size: 23px;
 }
 
 .col-car {
   color: rgba(255, 255, 255, 0.65);
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 500;
 }
 
@@ -798,27 +840,27 @@ button, input, select {
   }
 
   .ranking-table th {
-    font-size: 11px;
-  }
-
-  .ranking-table td {
     font-size: 13px;
   }
 
+  .ranking-table td {
+    font-size: 16px;
+  }
+
   .ranking-table td.col-time {
-    font-size: 15px;
+    font-size: 18px;
   }
 
   .position-badge {
-    font-size: 14px;
-    min-width: 32px;
-    height: 32px;
+    font-size: 17px;
+    min-width: 38px;
+    height: 38px;
   }
 
   .position-badge.medal-1,
   .position-badge.medal-2,
   .position-badge.medal-3 {
-    font-size: 24px;
+    font-size: 30px;
   }
 }
 
@@ -833,11 +875,11 @@ button, input, select {
   }
 
   .col-player {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .ranking-table td.col-time {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
@@ -914,23 +956,23 @@ button, input, select {
 
   .ranking-table td {
     padding: 8px 12px;
-    font-size: 14px;
+    font-size: 17px;
   }
 
   .ranking-table td.col-time {
-    font-size: 16px;
+    font-size: 19px;
   }
 
   .position-badge {
-    min-width: 30px;
-    height: 30px;
-    font-size: 14px;
+    min-width: 36px;
+    height: 36px;
+    font-size: 17px;
   }
 
   .position-badge.medal-1,
   .position-badge.medal-2,
   .position-badge.medal-3 {
-    font-size: 24px;
+    font-size: 30px;
   }
 
   .slideshow-wrapper {

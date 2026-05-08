@@ -202,9 +202,16 @@ export default function Leaderboard() {
                 </button>
                 <h2>CLASSIFICAÇÃO</h2>
               </div>
+              {selectedTrack !== 'all' && (
+                <div className="ranking-track-title">
+                  <span className="ranking-track-name">{selectedTrack}</span>
+                  {selectedLayout !== 'all' && (
+                    <span className="ranking-layout-name">{selectedLayout}</span>
+                  )}
+                </div>
+              )}
               <div className="filters-section">
                 <div className="track-selector">
-                  <label>Pista:</label>
                   <select
                     className="track-dropdown"
                     value={selectedTrack}
@@ -216,7 +223,6 @@ export default function Leaderboard() {
                 </div>
                 {availableLayouts.length > 0 && (
                   <div className="car-selector">
-                    <label>Layout:</label>
                     <select
                       className="car-dropdown"
                       value={selectedLayout}
@@ -228,7 +234,6 @@ export default function Leaderboard() {
                   </div>
                 )}
                 <div className="car-selector">
-                  <label>Carro:</label>
                   <select
                     className="car-dropdown"
                     value={selectedCar}
