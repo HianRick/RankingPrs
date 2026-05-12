@@ -307,12 +307,6 @@ export default function Leaderboard() {
           </div>
         </div>
       </div>
-
-      <div className="slideshow-section">
-        <div className="slideshow-wrapper">
-          <div className="slideshow-empty">Área de mídia</div>
-        </div>
-      </div>
     </div>
   )
 }
