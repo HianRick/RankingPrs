@@ -1,7 +1,5 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { useLeaderboardWS } from './useLeaderboardWS'
-
-const ITEMS_PER_PAGE = 8
 
 function formatTime(seconds) {
   if (seconds == null || isNaN(seconds) || seconds <= 0) return '--:--.---'
@@ -51,6 +49,25 @@ export default function Leaderboard() {
   const [currentPage, setCurrentPage] = useState(1)
   const [showSettings, setShowSettings] = useState(false)
   const [hiddenTracks, setHiddenTracks] = useState(new Set())
+  const [itemsPerPage, setItemsPerPage] = useState(13)
+  const tableWrapperRef = useRef(null)
+
+  // Calcular itens por página dinamicamente baseado na altura disponível
+  useEffect(() => {
+    const calculateItemsPerPage = () => {
+      if (!tableWrapperRef.current) return
+      const height = tableWrapperRef.current.clientHeight
+      const headerHeight = 56 // altura aproximada do header th
+      const rowHeight = 54 // altura aproximada de cada linha com padding
+      const availableHeight = height - headerHeight
+      const calculated = Math.max(5, Math.floor(availableHeight / rowHeight))
+      setItemsPerPage(calculated)
+    }
+
+    calculateItemsPerPage()
+    window.addEventListener('resize', calculateItemsPerPage)
+    return () => window.removeEventListener('resize', calculateItemsPerPage)
+  }, [])
 
   const displayEntries = isPaused ? (frozenEntries ?? entries) : entries
 
@@ -90,9 +107,9 @@ export default function Leaderboard() {
 
   const uniquePilotCount = useMemo(() => new Set(entries.map(e => e.driver)).size, [entries])
 
-  const totalPages = Math.max(1, Math.ceil(filteredEntries.length / ITEMS_PER_PAGE))
+  const totalPages = Math.max(1, Math.ceil(filteredEntries.length / itemsPerPage))
   const page = Math.min(currentPage, totalPages)
-  const pageEntries = filteredEntries.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+  const pageEntries = filteredEntries.slice((page - 1) * itemsPerPage, page * itemsPerPage)
 
   const toggleTrackVisibility = (track) => {
     setHiddenTracks(prev => {
@@ -246,7 +263,7 @@ export default function Leaderboard() {
               </div>
             </div>
 
-            <div className="ranking-table-wrapper">
+            <div className="ranking-table-wrapper" ref={tableWrapperRef}>
               {status === 'connecting' && entries.length === 0 ? (
                 <div className="loading-state">
                   <div className="spinner" />
@@ -270,7 +287,7 @@ export default function Leaderboard() {
                   </thead>
                   <tbody>
                     {pageEntries.map((entry, idx) => {
-                      const gi = (page - 1) * ITEMS_PER_PAGE + idx
+                      const gi = (page - 1) * itemsPerPage + idx
                       return (
                         <tr key={entry.id} className={rowClass(gi)}>
                           <td className="col-pos">{positionBadge(gi)}</td>
