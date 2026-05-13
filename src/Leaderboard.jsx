@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useEffect } from 'react'
 import { useLeaderboardWS } from './useLeaderboardWS'
+import logo from '../assets/logo3.png'
 
 function formatTime(seconds) {
   if (seconds == null || isNaN(seconds) || seconds <= 0) return '--:--.---'
@@ -50,6 +51,13 @@ export default function Leaderboard() {
   const [showSettings, setShowSettings] = useState(false)
   const [hiddenTracks, setHiddenTracks] = useState(new Set())
   const [itemsPerPage, setItemsPerPage] = useState(13)
+  const [carAliases, setCarAliases] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('carAliases') || '{}') } catch { return {} }
+  })
+  const [aliasSelectedCar, setAliasSelectedCar] = useState('')
+  const [aliasInput, setAliasInput] = useState('')
+  const [clientBanner, setClientBanner] = useState(() => localStorage.getItem('clientBanner') || null)
+  const bannerInputRef = useRef(null)
   const tableWrapperRef = useRef(null)
 
   // Calcular itens por página dinamicamente baseado na altura disponível
@@ -111,6 +119,45 @@ export default function Leaderboard() {
   const page = Math.min(currentPage, totalPages)
   const pageEntries = filteredEntries.slice((page - 1) * itemsPerPage, page * itemsPerPage)
 
+  const saveCarAlias = () => {
+    if (!aliasSelectedCar) return
+    const updated = { ...carAliases, [aliasSelectedCar]: aliasInput.trim() }
+    setCarAliases(updated)
+    localStorage.setItem('carAliases', JSON.stringify(updated))
+    setAliasSelectedCar('')
+    setAliasInput('')
+  }
+
+  const removeCarAlias = (car) => {
+    const updated = { ...carAliases }
+    delete updated[car]
+    setCarAliases(updated)
+    localStorage.setItem('carAliases', JSON.stringify(updated))
+  }
+
+  const displayCar = (car) => {
+    const name = carAliases[car] ?? car
+    return name?.replace(/[_-]/g, ' ')
+  }
+
+  const handleBannerUpload = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const data = ev.target.result
+      setClientBanner(data)
+      localStorage.setItem('clientBanner', data)
+    }
+    reader.readAsDataURL(file)
+    e.target.value = ''
+  }
+
+  const removeBanner = () => {
+    setClientBanner(null)
+    localStorage.removeItem('clientBanner')
+  }
+
   const toggleTrackVisibility = (track) => {
     setHiddenTracks(prev => {
       const next = new Set(prev)
@@ -164,6 +211,82 @@ export default function Leaderboard() {
                   </label>
                 ))}
               </div>
+
+              <div className="settings-section-divider" />
+
+              <p className="settings-description">
+                Renomear carros no ranking:
+              </p>
+              <div className="car-alias-form">
+                <select
+                  className="car-alias-select"
+                  value={aliasSelectedCar}
+                  onChange={e => {
+                    setAliasSelectedCar(e.target.value)
+                    setAliasInput(carAliases[e.target.value] ?? '')
+                  }}
+                >
+                  <option value="">Selecione um carro...</option>
+                  {allCars.map(c => (
+                    <option key={c} value={c}>{c.replace(/[_-]/g, ' ')}</option>
+                  ))}
+                </select>
+                <input
+                  className="car-alias-input"
+                  type="text"
+                  placeholder="Nome a exibir"
+                  value={aliasInput}
+                  onChange={e => setAliasInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && saveCarAlias()}
+                />
+                <button className="car-alias-save-button" onClick={saveCarAlias}>
+                  Salvar
+                </button>
+              </div>
+
+              {Object.keys(carAliases).length > 0 && (
+                <div className="car-alias-list">
+                  {Object.entries(carAliases).map(([original, alias]) => (
+                    <div key={original} className="car-alias-item">
+                      <span className="car-alias-original">{original.replace(/[_-]/g, ' ')}</span>
+                      <span className="car-alias-arrow">→</span>
+                      <span className="car-alias-name">{alias}</span>
+                      <button className="car-alias-remove" onClick={() => removeCarAlias(original)}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="settings-section-divider" />
+
+              <p className="settings-description">Banner do cliente:</p>
+              <div className="banner-upload-section">
+                {clientBanner ? (
+                  <div className="banner-preview-wrapper">
+                    <img src={clientBanner} alt="Banner atual" className="banner-preview-img" />
+                    <div className="banner-preview-actions">
+                      <button className="car-alias-save-button" onClick={() => bannerInputRef.current?.click()}>
+                        Trocar imagem
+                      </button>
+                      <button className="banner-remove-button" onClick={removeBanner}>
+                        Remover banner
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button className="banner-upload-button" onClick={() => bannerInputRef.current?.click()}>
+                    + Selecionar imagem
+                  </button>
+                )}
+                <input
+                  ref={bannerInputRef}
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleBannerUpload}
+                />
+                <p className="banner-hint">PNG, JPG ou SVG • aparece à direita do título</p>
+              </div>
             </div>
           </div>
         </div>
@@ -174,7 +297,13 @@ export default function Leaderboard() {
           <button className="settings-button" onClick={() => setShowSettings(true)} title="Configurações">
             ⚙️
           </button>
-          <h1>🏁 RANKING AO VIVO</h1>
+          <div className="header-title-group">
+            <img src={logo} alt="Pro Racing logo" className="header-logo" />
+            <h1>🏁 RANKING AO VIVO</h1>
+            {clientBanner && (
+              <img src={clientBanner} alt="Banner do cliente" className="client-banner-img" />
+            )}
+          </div>
         </div>
 
         <div className="leaderboard-layout">
@@ -291,8 +420,8 @@ export default function Leaderboard() {
                       return (
                         <tr key={entry.id} className={rowClass(gi)}>
                           <td className="col-pos">{positionBadge(gi)}</td>
-                          <td className="col-player">{entry.driver}</td>
-                          <td className="col-car">{entry.car}</td>
+                          <td className="col-player">{entry.driver?.replace(/[_-]/g, ' ')}</td>
+                          <td className="col-car">{displayCar(entry.car)}</td>
                           <td className="col-time">{formatTime(entry.time)}</td>
                         </tr>
                       )

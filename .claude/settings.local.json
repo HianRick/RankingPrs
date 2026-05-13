@@ -10,7 +10,8 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\" -File | Where-Object { $_.Name -match '\\\\.\\(json|ts|js|html\\)$|vite|webpack|tsconfig|package' } | ForEach-Object { $_.FullName })",
       "PowerShell(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\" -Force | Where-Object { -not $_.PSIsContainer } | ForEach-Object { $_.Name })",
       "Bash(npm run *)",
-      "Bash(Get-Content \"C:\\\\Users\\\\PRSCOM~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--projects-RankingPrs\\\\7666306b-97f5-44ff-bfae-7c601c5678c3\\\\tasks\\\\bvcdh545v.output\" -Tail 20)"
+      "Bash(Get-Content \"C:\\\\Users\\\\PRSCOM~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--projects-RankingPrs\\\\7666306b-97f5-44ff-bfae-7c601c5678c3\\\\tasks\\\\bvcdh545v.output\" -Tail 20)",
+      "PowerShell(Get-ChildItem \"C:\\\\projects\\\\RankingPrs\" | Where-Object { $_.Name -ne 'node_modules' -and $_.Name -ne 'dist' } | Select-Object Name)"
     ]
   }
 }
