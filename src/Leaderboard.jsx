@@ -176,6 +176,12 @@ export default function Leaderboard({
               >
                 🎨 Cores
               </button>
+              <button
+                className={`settings-tab${settingsTab === 'midia' ? ' settings-tab-active' : ''}`}
+                onClick={() => setSettingsTab('midia')}
+              >
+                🖼️ Mídia
+              </button>
             </div>
 
             {settingsTab === 'layout' ? (
@@ -212,7 +218,22 @@ export default function Leaderboard({
                 </div>
 
                 <div className="settings-section-divider" />
-
+                <p className="settings-description">Cor de fundo dos blocos:</p>
+                <div className="block-color-grid">
+                  {[['header','Header'],['status','Status'],['ranking','Ranking'],['media','Mídia']].map(([key, label]) => (
+                    <div key={key} className="block-color-row">
+                      <span className="block-color-label">{label}</span>
+                      <input type="color" className="palette-custom-input"
+                        value={blockColors?.[key] || '#1a1a1a'}
+                        onChange={e => onBlockColorChange(key, e.target.value)} />
+                      <button className="bg-remove-btn" style={{ fontSize: 11, padding: '3px 8px' }}
+                        onClick={() => onBlockColorChange(key, '')}>Reset</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : settingsTab === 'midia' ? (
+              <div className="settings-modal-content">
                 <p className="settings-description">Imagem de fundo do ranking:</p>
                 <div className="bg-upload-row">
                   <button className="banner-upload-button" onClick={() => rankBgInputRef?.current?.click()}>
@@ -223,7 +244,6 @@ export default function Leaderboard({
                   )}
                 </div>
                 <p className="banner-hint">PNG ou JPG</p>
-
                 {rankBgImage && (
                   <>
                     <p className="settings-description" style={{ marginTop: 16 }}>Desfoque:</p>
@@ -240,21 +260,6 @@ export default function Leaderboard({
                     </div>
                   </>
                 )}
-
-                <div className="settings-section-divider" />
-                <p className="settings-description">Cor de fundo dos blocos:</p>
-                <div className="block-color-grid">
-                  {[['header','Header'],['status','Status'],['ranking','Ranking'],['media','Mídia']].map(([key, label]) => (
-                    <div key={key} className="block-color-row">
-                      <span className="block-color-label">{label}</span>
-                      <input type="color" className="palette-custom-input"
-                        value={blockColors?.[key] || '#1a1a1a'}
-                        onChange={e => onBlockColorChange(key, e.target.value)} />
-                      <button className="bg-remove-btn" style={{ fontSize: 11, padding: '3px 8px' }}
-                        onClick={() => onBlockColorChange(key, '')}>Reset</button>
-                    </div>
-                  ))}
-                </div>
 
                 <div className="settings-section-divider" />
                 <p className="settings-description">Conteúdo do bloco de mídia:</p>
@@ -277,6 +282,61 @@ export default function Leaderboard({
                       ))}
                     </div>
                   </>
+                )}
+
+                <div className="settings-section-divider" />
+                <p className="settings-description">Banners de patrocinadores (passam na horizontal):</p>
+                <button
+                  className="banner-upload-button"
+                  onClick={() => sponsorInputRef?.current?.click()}
+                >
+                  + Adicionar banners
+                </button>
+                <p className="banner-hint">PNG, JPG ou SVG • selecione múltiplos de uma vez</p>
+                {sponsors?.length > 0 && (
+                  <div className="sponsors-settings-list">
+                    {sponsors.map((s, i) => (
+                      <div key={s.id} className="sponsor-settings-item">
+                        <img src={s.data} alt={`Sponsor ${i + 1}`} className="sponsor-settings-thumb" />
+                        <span className="sponsor-settings-label">Banner {i + 1}</span>
+                        <button className="car-alias-remove sponsor-remove-btn" onClick={() => onRemoveSponsor(s.id)}>✕</button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="settings-section-divider" />
+                <p className="settings-description">Carrossel de logos:</p>
+                <div style={{ display: 'flex', gap: 10 }}>
+                  {[['Animado', true], ['Estático', false]].map(([label, val]) => (
+                    <button key={label} className={`blur-btn${carouselActive === val ? ' active' : ''}`}
+                      onClick={() => onCarouselActiveChange(val)}>{label}</button>
+                  ))}
+                </div>
+
+                <div className="settings-section-divider" />
+                <p className="settings-description">Foto dos pilotos:</p>
+                <div className="car-alias-form">
+                  <select className="car-alias-select" value={pendingPhotoDriver}
+                    onChange={e => onPendingPhotoDriver(e.target.value)}>
+                    <option value="">Selecione um piloto...</option>
+                    {allDrivers.map(d => <option key={d} value={d}>{displayDriver(d)}</option>)}
+                  </select>
+                  <button className="banner-upload-button"
+                    onClick={() => pendingPhotoDriver && driverPhotoInputRef?.current?.click()}>
+                    + Foto
+                  </button>
+                </div>
+                {Object.keys(driverPhotos || {}).length > 0 && (
+                  <div className="car-alias-list">
+                    {Object.entries(driverPhotos).map(([driver, photo]) => (
+                      <div key={driver} className="car-alias-item">
+                        <img src={photo} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} alt="" />
+                        <span className="car-alias-name">{displayDriver(driver)}</span>
+                        <button className="car-alias-remove" onClick={() => onRemoveDriverPhoto(driver)}>✕</button>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             ) : (
@@ -362,63 +422,6 @@ export default function Leaderboard({
                 onChange={e => onTitleChange(e.target.value)}
                 style={{ width: '100%' }}
               />
-
-              <div className="settings-section-divider" />
-
-              <p className="settings-description">Banners de patrocinadores (passam na horizontal):</p>
-              <button
-                className="banner-upload-button"
-                onClick={() => sponsorInputRef?.current?.click()}
-              >
-                + Adicionar banners
-              </button>
-              <p className="banner-hint">PNG, JPG ou SVG • selecione múltiplos de uma vez</p>
-
-              {sponsors?.length > 0 && (
-                <div className="sponsors-settings-list">
-                  {sponsors.map((s, i) => (
-                    <div key={s.id} className="sponsor-settings-item">
-                      <img src={s.data} alt={`Sponsor ${i + 1}`} className="sponsor-settings-thumb" />
-                      <span className="sponsor-settings-label">Banner {i + 1}</span>
-                      <button className="car-alias-remove sponsor-remove-btn" onClick={() => onRemoveSponsor(s.id)}>✕</button>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              <div className="settings-section-divider" />
-              <p className="settings-description">Carrossel de logos:</p>
-              <div style={{ display: 'flex', gap: 10 }}>
-                {[['Animado', true], ['Estático', false]].map(([label, val]) => (
-                  <button key={label} className={`blur-btn${carouselActive === val ? ' active' : ''}`}
-                    onClick={() => onCarouselActiveChange(val)}>{label}</button>
-                ))}
-              </div>
-
-              <div className="settings-section-divider" />
-              <p className="settings-description">Foto dos pilotos:</p>
-              <div className="car-alias-form">
-                <select className="car-alias-select" value={pendingPhotoDriver}
-                  onChange={e => onPendingPhotoDriver(e.target.value)}>
-                  <option value="">Selecione um piloto...</option>
-                  {allDrivers.map(d => <option key={d} value={d}>{displayDriver(d)}</option>)}
-                </select>
-                <button className="banner-upload-button"
-                  onClick={() => pendingPhotoDriver && driverPhotoInputRef?.current?.click()}>
-                  + Foto
-                </button>
-              </div>
-              {Object.keys(driverPhotos || {}).length > 0 && (
-                <div className="car-alias-list">
-                  {Object.entries(driverPhotos).map(([driver, photo]) => (
-                    <div key={driver} className="car-alias-item">
-                      <img src={photo} style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} alt="" />
-                      <span className="car-alias-name">{displayDriver(driver)}</span>
-                      <button className="car-alias-remove" onClick={() => onRemoveDriverPhoto(driver)}>✕</button>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
             )}
           </div>

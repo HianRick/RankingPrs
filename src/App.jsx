@@ -371,11 +371,11 @@ export default function App() {
         <div style={blockStyle(layout.header)}>
           <div className="header-block" style={{ '--header-bg': blockColors.header || 'rgb(26,26,26)', ...(blockColors.header ? { background: blockColors.header } : {}) }}>
             <HeaderCarousel logo={logo} sponsors={sponsors} active={carouselActive} />
-            <div className="header-title-mask">
-              <h1 className="header-title">
-                {customTitle || '🏁 RANKING AO VIVO'}
-              </h1>
-            </div>
+            {customTitle && (
+              <div className="header-title-mask">
+                <h1 className="header-title">{customTitle}</h1>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -397,20 +397,24 @@ export default function App() {
               </div>
               {top3.length === 0 ? (
                 <div className="podium-empty">Aguardando dados...</div>
-              ) : top3.map((entry, i) => (
-                <div key={entry.id ?? i} className={`podium-card podium-pos-${i + 1}`}>
-                  <div className="podium-photo-area">
-                    {driverPhotos[entry.driver]
-                      ? <img className="podium-photo" src={driverPhotos[entry.driver]} alt="" />
-                      : <div className="podium-photo-placeholder">{entry.driver?.[0]?.toUpperCase() ?? '?'}</div>
-                    }
-                  </div>
-                  <div className="podium-details">
-                    <div className="podium-name">{displayDriver(entry.driver)}</div>
-                    <div className="podium-time">{formatTime(entry.time)}</div>
-                  </div>
+              ) : (
+                <div className="podium-cards">
+                  {top3.map((entry, i) => (
+                    <div key={entry.id ?? i} className={`podium-card podium-pos-${i + 1}`}>
+                      <div className="podium-photo-area">
+                        {driverPhotos[entry.driver]
+                          ? <img className="podium-photo" src={driverPhotos[entry.driver]} alt="" />
+                          : <div className="podium-photo-placeholder">{entry.driver?.[0]?.toUpperCase() ?? '?'}</div>
+                        }
+                      </div>
+                      <div className="podium-details">
+                        <div className="podium-name">{displayDriver(entry.driver)}</div>
+                        <div className="podium-time">{formatTime(entry.time)}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
