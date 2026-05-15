@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 
 const API_BASE = 'https://wc-prs.fastalk.com.br'
 const WS_URL = `${API_BASE.replace('https', 'wss')}/output`
-const EVENT_NAME = 'teste'
+const EVENT_NAME = 'GTO'
 
 function parseRaw(raw) {
   const pilotName = raw['pilot-name']

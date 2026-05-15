@@ -11,7 +11,10 @@
       "PowerShell(Get-ChildItem -Path \"C:\\\\projects\\\\RankingPrs\" -Force | Where-Object { -not $_.PSIsContainer } | ForEach-Object { $_.Name })",
       "Bash(npm run *)",
       "Bash(Get-Content \"C:\\\\Users\\\\PRSCOM~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--projects-RankingPrs\\\\7666306b-97f5-44ff-bfae-7c601c5678c3\\\\tasks\\\\bvcdh545v.output\" -Tail 20)",
-      "PowerShell(Get-ChildItem \"C:\\\\projects\\\\RankingPrs\" | Where-Object { $_.Name -ne 'node_modules' -and $_.Name -ne 'dist' } | Select-Object Name)"
+      "PowerShell(Get-ChildItem \"C:\\\\projects\\\\RankingPrs\" | Where-Object { $_.Name -ne 'node_modules' -and $_.Name -ne 'dist' } | Select-Object Name)",
+      "PowerShell($file = \"C:\\\\Users\\\\PRS COMERCIAL\\\\.claude\\\\projects\\\\C--projects-RankingPrs\\\\554819ed-84d7-4059-8792-c790388bc186\\\\tool-results\\\\webfetch-1778848111322-fzpgv1.bin\"; $bytes = [System.IO.File]::ReadAllBytes\\($file\\); $decompressed = New-Object System.IO.MemoryStream; $gzip = New-Object System.IO.Compression.GZipStream\\([System.IO.MemoryStream]::new\\($bytes\\), [System.IO.Compression.CompressionMode]::Decompress\\); $gzip.CopyTo\\($decompressed\\); [System.Text.Encoding]::UTF8.GetString\\($decompressed.ToArray\\(\\)\\))",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5173)",
+      "Bash(npx tsc *)"
     ]
   }
 }
